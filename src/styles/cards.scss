@@ -1,0 +1,9 @@
+@use "card";
+@use "vars" as vars;
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(9, 150px);
+  gap: 1rem;
+  justify-content: center;
+}

@@ -1,0 +1,267 @@
+@use "mixins" as mixins;
+@use "vars" as vars;
+
+@use 'sass:math' as math;
+
+/* Анимация "вылета" карточки */
+@keyframes cardFlyOut {
+
+  0% {
+    top: var(--card-top);
+    left: var(--card-left);
+  }
+
+  100% {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(2.11);
+    // max-width: 40%;
+    // max-height: 80%;
+  }
+}
+
+/* Анимация "возврата" карточки */
+@keyframes cardFlyIn {
+  0% {
+    top: 50%;
+    left: 50%;
+    transform: translate(0%, 0%) scale(2.11);
+  }
+
+  100% {
+    top: var(--card-top);
+    left: var(--card-left);
+    transform: scale(1);
+  }
+}
+
+$max-width-active: 15rem;
+$max-height: 12.5rem;
+
+$top-height: 44%;
+$bottom-height: calc(100% - ($top-height - 2rem));
+$shiftFromTop: 1rem;
+
+.card {
+
+  background: url(/images/border.svg), url(/images/maxresdefault.png);
+  background-repeat: no-repeat, no-repeat;
+  background-position: center, top $shiftFromTop left $shiftFromTop;
+  background-size: 100% 100%, 80% calc($top-height - $shiftFromTop);
+
+  max-width: 100%;
+  max-height: $max-height;
+  // width: 100%;
+  overflow: hidden;
+  cursor: pointer;
+
+  transition: transform 1s ease, z-index 1s ease;
+  will-change: transform, opacity;
+  z-index: 3;
+
+  &.active {
+    background-size: 100% 100%, 90% calc(50% - 1rem);
+    position: fixed;
+    top: var(--card-top, 50%);
+    left: var(--card-left, 50%);
+    transform: translate(-50%, -50%) scale(var(--card-scale, 1));
+    z-index: 5;
+    width: 90%;
+    max-width: $max-width-active;
+    height: 100%;
+    max-height: 35vh;
+    animation: cardFlyOut 0.3s ease forwards;
+
+    margin: 0 auto;
+
+    .card__bottom {
+      height: 9vh
+    }
+
+    .card__inner {
+      clip-path: vars.$poligon-border-active;
+      height: 88%;
+    }
+
+    .card__top {
+      padding: 0 1rem
+    }
+
+    .card__image {
+      max-height: 120%
+    }
+  }
+
+  &.deactivating {
+    animation: cardFlyIn .3s ease forwards;
+  }
+
+  &__inner {
+    @include mixins.df(center, center, column);
+    position: relative;
+    height: 100%;
+    // padding: 0 clamp(1rem, 5%, 2rem);
+    z-index: -1;
+
+    clip-path: vars.$poligon-border;
+  }
+
+  &__top {
+    @include mixins.df(center, flex-end, );
+    width: 100%;
+    max-height: $top-height;
+    height: 100%;
+    position: relative;
+    padding: 0 0 0 1.4rem;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #2D008E, vars.$electric-blue);
+
+    }
+  }
+
+  &__level {
+    @include mixins.font(700);
+    @include mixins.df(end, center, column);
+    gap: 0.2rem;
+    flex: 0 0 20%;
+    max-width: 20%;
+    padding-left: .5rem;
+
+    span {
+      text-shadow: vars.$bg 1px 0 10px;
+    }
+
+    img {
+      max-width: 80%;
+      height: auto;
+    }
+  }
+
+  &__image {
+    flex: 1;
+    overflow: hidden;
+    max-height: calc(100% - $shiftFromTop);
+  }
+
+  &__bottom {
+    width: 100%;
+    height: $bottom-height;
+
+    .selected-label {
+      @include mixins.font(700);
+      font-size: 1.2rem;
+      text-align: center;
+      color: vars.$green;
+
+      position: absolute;
+      top: 22%;
+      left: -28%;
+      opacity: 0;
+      visibility: hidden;
+      transform: translate(50%, 0%);
+      transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+      z-index: 4;
+      /* Чтобы надпись была поверх всего */
+    }
+  }
+
+  &__title {
+    text-align: center;
+    padding: calc($shiftFromTop / 2) 0;
+  }
+
+  &__info {
+    font-size: .5rem;
+    position: relative;
+    display: block;
+    text-align: center;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #2D008E, vars.$electric-blue);
+    }
+
+    &-items {
+      @include mixins.df(center, center);
+      gap: 2rem;
+      padding: .3rem 0;
+      text-align: start;
+      position: relative;
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 2px;
+        height: 100%;
+        background-color: vars.$electric-blue;
+
+      }
+    }
+
+    &-item {
+      width: 33%;
+
+      &:first-child {
+        text-align: end;
+      }
+
+      span {
+        display: block;
+      }
+    }
+  }
+
+  & .status {
+    @include mixins.font(700);
+    display: block;
+    color: vars.$electric-blue;
+    padding-top: .25rem;
+    position: relative;
+
+    &::after {
+      background: vars.$electric-blue;
+      content: "";
+      position: absolute;
+      top: 0%;
+      left: 50%;
+      width: 3rem;
+      height: 2px;
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+
+$randomNumber: math.percentage(0.2);
+
+$widthCard: - 150px;
+$gapCards: 16px;
+
+// margin-left
+$ml: calc(($widthCard / 2) - ($gapCards / 2));
+
+.ml-s {
+  margin-left: $ml;
+}
+
+.ml-m {
+  margin-left: $ml * 2;
+}
+
+.ml-l {
+  margin-left: $ml * 3;
+}

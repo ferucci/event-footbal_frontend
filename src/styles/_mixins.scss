@@ -1,0 +1,19 @@
+@mixin ph {
+  @media (max-width: 700px) {
+    @content;
+  }
+}
+
+@mixin font($fw: 400) {
+  font-family: "Montserrat-Regular", sans-serif;
+  font-weight: $fw;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+@mixin df($posX: center, $posY: center, $fd: initial) {
+  display: flex;
+  flex-direction: $fd;
+  align-items: $posY;
+  justify-content: $posX;
+}
