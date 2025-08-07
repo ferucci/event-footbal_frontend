@@ -77,7 +77,6 @@ export const verifyToken = async (token: string) => {
         'Authorization': `Bearer ${token}`, // Передаём токен
       },
     });
-    console.log(token);
 
     if (response.status === 401) {
       console.log('Токен недействителен или просрочен')
