@@ -1,4 +1,4 @@
-import type { CardData } from '@/interface';
+import type { CardData } from '@/types';
 
 export interface UseCardManagerProps {
   cardsContainerRef: React.RefObject<HTMLDivElement | null>;

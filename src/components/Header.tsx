@@ -1,11 +1,15 @@
 import React from 'react';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  title: string;
+}
+
+const Header: React.FC<HeaderProps> = ({ title }) => {
   return (
     <header className="header">
       <div className="header__inner">
         <div className="header__logo">
-          <img src="./images/logo.svg" alt="logo" />
+          <img src="./images/logo.svg" alt={title} />
         </div>
       </div>
     </header>

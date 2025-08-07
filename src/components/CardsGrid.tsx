@@ -1,8 +1,9 @@
-import type { CardData } from '@/interface';
+import type { CardData } from '@/types';
 import { urlApi } from '@/utils/vars';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Card from './Card';
 import { useCardManager } from './CardManager/CardManager';
+import LoadingSpinner from './LoadingSpinner';
 
 const CardsGrid: React.FC = () => {
   const [cardsData, setCardsData] = useState<CardData[]>([]);
@@ -40,7 +41,7 @@ const CardsGrid: React.FC = () => {
     fetchCardsData();
   }, []);
 
-  if (loading) return <div>Loading cards...</div>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <div>Error: {error}</div>;
 
   return (

@@ -1,4 +1,4 @@
-import type { CardData } from "@/interface";
+import type { CardData } from "@/types";
 import { urlApi } from "@/utils/vars";
 
 // метод для отправки данных карточки на бэкенд

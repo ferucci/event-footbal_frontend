@@ -1,12 +1,5 @@
-import type { CardData } from '@/interface';
+import type { CardProps } from '@/types';
 import React, { useRef } from 'react';
-
-interface CardProps extends CardData {
-  onClick: (
-    cardRef: React.RefObject<HTMLDivElement>,
-    cardData: Omit<CardProps, 'onClick'>
-  ) => void;
-}
 
 const Card: React.FC<CardProps> = (cardData: CardProps) => {
   const { id, name, number, position, height, weight, rate, image, country, onClick, } = cardData;

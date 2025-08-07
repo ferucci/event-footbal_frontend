@@ -1,4 +1,4 @@
-import type { CardData } from '@/interface';
+import type { CardData } from '@/types';
 import React, { useEffect, useRef, useState } from 'react';
 import { handleApiError, sendWithRetry } from './apiHandlers';
 import { CardAnimator } from './cardAnimation';

@@ -1,4 +1,4 @@
-import type { CardData } from '@/interface';
+import type { CardData } from '@/types';
 import { sendCardDataToApi } from './sendCardDataToApi';
 
 const MAX_RETRIES = 3;
