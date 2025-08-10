@@ -6,7 +6,7 @@ const HomePage = () => {
   const { isAuthenticated, isLoading } = useAuth();
   if (isLoading) return
 
-  // Если пользователь аутентифицирован - перенаправляем на /site1
+  // Если пользователь аутентифицирован - перенаправляем на /site
   // Если нет - перенаправляем на /login
   return isAuthenticated ?
     <Navigate to={PATH_DINAMO} replace /> :

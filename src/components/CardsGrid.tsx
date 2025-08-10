@@ -13,9 +13,9 @@ const CardsGrid: React.FC = () => {
   const cardsContainerRef = useRef<HTMLDivElement>(null);
   const { handleCardClick, overlayRef } = useCardManager({ cardsContainerRef });
 
-  // Сортируем карточки по возрастанию id
+  // Сортировка карточек
   const sortedCards = useMemo(() => {
-    return [...cardsData].sort((a, b) => a.id - b.id);
+    return [...cardsData].sort((a, b) => +b.rate - +a.rate);
   }, [cardsData]);
 
   // Эффект для загрузки данных при монтировании компонента

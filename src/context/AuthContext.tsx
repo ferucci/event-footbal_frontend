@@ -1,5 +1,5 @@
 import type { AuthContextType, LocationWithState } from '@/types';
-import { SAFE_PATHS } from '@/utils/vars';
+import { PATH_DINAMO, SAFE_PATHS } from '@/utils/vars';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { login as apiLogin, logout as apiLogout, verifyToken } from '../api/auth';
@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       // Вызов API для входа
       const { accessToken, expiresIn, user } = await apiLogin(email, password);
-      console.log(accessToken)
+
       // Сохранение данных в localStorage
       localStorage.setItem('token', accessToken);
       localStorage.setItem('token_expires', String(Date.now() + expiresIn * 1000));
@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         '/';
 
       // Проверяем, что путь безопасен 
-      const finalPath = SAFE_PATHS.includes(targetPath) ? targetPath : '/site1';
+      const finalPath = SAFE_PATHS.includes(targetPath) ? targetPath : PATH_DINAMO;
 
       navigate(finalPath, { replace: true });
     } catch (error) {
