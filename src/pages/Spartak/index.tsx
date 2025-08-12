@@ -1,4 +1,4 @@
-import CardsGrid from '@/components/CardsGrid';
+
 import Header from '@/components/Header';
 import '@/styles/main.scss';
 import React from 'react';
@@ -8,7 +8,7 @@ const App: React.FC = () => {
     <div className='wrapper'>
       <Header title="Spartak site" />
       <main>
-        <CardsGrid />
+        Форма, которая отравляет данные ( М/Ж, Имя, номер очереди )
       </main>
     </div>
   );
