@@ -8,10 +8,7 @@ dist
 dist-ssr
 *.local
 
-.env
-*.md
-
-# Editor directories and files
+.env.deploy
 .vscode/*
 !.vscode/extensions.json
 .idea
