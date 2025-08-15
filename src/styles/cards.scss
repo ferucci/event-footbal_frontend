@@ -2,8 +2,9 @@
 @use "vars" as vars;
 
 .cards {
-  display: grid;
-  grid-template-columns: repeat(9, 150px);
+  display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
-  justify-content: center;
+  justify-content: space-around;
+  padding: 0 1rem;
 }

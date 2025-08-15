@@ -5,6 +5,29 @@
 @use "header";
 @use "cards";
 
+
+// Стили для скроллбара (WebKit браузеры)
+*::-webkit-scrollbar {
+  height: 2px; // Высота всей полосы прокрутки
+  background-color: transparent;
+  border-radius: 1rem;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: vars.$color-bg-login; // Цвет линии трека
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: vars.$blue; // Цвет ползунка
+  height: 1px; // Высота ползунка
+  border-radius: 1rem;
+}
+
+* {
+  scrollbar-width: thin; // "auto" | "thin" | "none"
+  scrollbar-color: vars.$blue vars.$color-bg-login; // thumb track
+}
+
 body {
   @include mixins.font();
   line-height: 1.5;
@@ -13,7 +36,7 @@ body {
   height: 100vh;
   scrollbar-color: vars.$deep-purple vars.$electric-blue;
   scrollbar-width: thin;
-  overflow: hidden;
+  user-select: none;
 
   &::-webkit-scrollbar {
     width: 5px;
@@ -22,15 +45,6 @@ body {
   &::-webkit-scrollbar-track {
     background-color: vars.$deep-purple;
   }
-}
-
-.wrapper {
-  display: flex;
-  gap: 1rem
-}
-
-main {
-  margin-top: 7rem;
 }
 
 .title {
@@ -56,4 +70,12 @@ main {
 .card.active .selected-label {
   opacity: 1;
   visibility: visible;
+}
+
+img {
+  -webkit-user-drag: none;
+  /* Блокировка перетаскивания изображений */
+  user-drag: none;
+  -moz-user-drag: none;
+  -ms-user-drag: none;
 }

@@ -43,13 +43,12 @@ $bottom-height: calc(100% - ($top-height - 2rem));
 $shiftFromTop: 1rem;
 
 .card {
-
   background: url(/images/border.svg), url(/images/maxresdefault.png);
   background-repeat: no-repeat, no-repeat;
   background-position: center, top $shiftFromTop left $shiftFromTop;
   background-size: 100% 100%, 80% calc($top-height - $shiftFromTop);
 
-  max-width: 100%;
+  max-width: 10rem;
   max-height: $max-height;
   // width: 100%;
   overflow: hidden;
@@ -60,6 +59,7 @@ $shiftFromTop: 1rem;
   z-index: 3;
 
   &.active {
+    max-width: 100%;
     background-size: 100% 100%, 90% calc(50% - 1rem);
     position: fixed;
     top: var(--card-top, 50%);
@@ -138,6 +138,10 @@ $shiftFromTop: 1rem;
       text-shadow: vars.$bg 1px 0 10px;
     }
 
+    .rate {
+      min-height: 1.3rem;
+    }
+
     img {
       max-width: 80%;
       height: auto;
@@ -148,6 +152,15 @@ $shiftFromTop: 1rem;
     flex: 1;
     overflow: hidden;
     max-height: calc(100% - $shiftFromTop);
+
+    user-select: none;
+    /* Блокировка выделения */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+
+    pointer-events: none;
+
   }
 
   &__bottom {

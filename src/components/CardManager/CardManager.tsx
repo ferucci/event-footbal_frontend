@@ -2,7 +2,6 @@ import type { CardData } from '@/types';
 import React, { useEffect, useRef, useState } from 'react';
 import { handleApiError, sendWithRetry } from './apiHandlers';
 import { CardAnimator } from './cardAnimation';
-import { calculateCardOffsets, setupResizeListener } from './layoutCalculations';
 
 // Интерфейс для пропсов хука - ожидает ref контейнера карточек
 interface UseCardManagerProps {
@@ -28,12 +27,8 @@ export const useCardManager = ({ cardsContainerRef }: UseCardManagerProps) => {
     bodyRef.current = document.body as HTMLBodyElement;
     animatorRef.current = new CardAnimator(overlayRef, bodyRef, cardsContainerRef);
 
-    calculateCardOffsets(cardsContainerRef);
-    const cleanupResizeListener = setupResizeListener(cardsContainerRef);
-
     return () => {
-      cleanupResizeListener();
-      // очистка
+
       if (animatorRef.current) animatorRef.current.cleanup();
     };
   }, []);
