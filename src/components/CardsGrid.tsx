@@ -11,7 +11,16 @@ const CardsGrid: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const cardsContainerRef = useRef<HTMLDivElement>(null);
-  const { handleCardClick, overlayRef } = useCardManager({ cardsContainerRef });
+  const {
+    handleCardClick,
+    handleSelectButtonClick,
+    handleOverlayClick,
+    overlayRef,
+    selectedCardId,
+    isSelectButtonDisabled, // Получаем состояние блокировки кнопки
+    isAnimating,
+    showActionText,
+  } = useCardManager({ cardsContainerRef });
 
   // Сортировка карточек
   const sortedCards = useMemo(() => {
@@ -59,9 +68,18 @@ const CardsGrid: React.FC = () => {
           image={card.image}
           country={card.country}
           onClick={handleCardClick}
+          onSelectButtonClick={handleSelectButtonClick}
+          isSelected={selectedCardId === String(card.id)}
+          isSelectButtonDisabled={isSelectButtonDisabled} // Передаем пропс
+          isAnimating={isAnimating} // Передаем состояние анимации
+          showActionText={showActionText && selectedCardId === String(card.id)} // Показываем только для выбранной карточки
         />
       ))}
-      <div className="overlay" ref={overlayRef}></div>
+      <div
+        className="overlay"
+        ref={overlayRef}
+        onClick={handleOverlayClick}
+      ></div>
     </section>
   );
 };

@@ -1,12 +1,41 @@
 import type { CardProps } from '@/types';
 import React, { useRef } from 'react';
 
-const Card: React.FC<CardProps> = (cardData: CardProps) => {
-  const { id, name, number, position, height, weight, rate, image, country, onClick, } = cardData;
+interface ExtendedCardProps extends CardProps {
+  onSelectButtonClick: () => void;
+  isSelected: boolean;
+  isSelectButtonDisabled: boolean;
+  isAnimating: boolean;
+  showActionText: boolean;
+}
+
+const Card: React.FC<ExtendedCardProps> = (cardData: ExtendedCardProps) => {
+  const {
+    id,
+    name,
+    number,
+    position,
+    height,
+    weight,
+    rate,
+    image,
+    country,
+    onClick,
+    onSelectButtonClick,
+    isSelected,
+    isSelectButtonDisabled,
+    isAnimating,
+    showActionText
+  } = cardData;
 
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleClick = () => {
+    // Блокируем если: выбрана, идет анимация, загрузка
+    if (isSelected || isAnimating) {
+      return;
+    }
+
     if (cardRef.current) {
       const typedRef: React.RefObject<HTMLDivElement> = {
         current: cardRef.current
@@ -28,8 +57,24 @@ const Card: React.FC<CardProps> = (cardData: CardProps) => {
     }
   };
 
+  const handleSelectClick = (e: React.MouseEvent) => {
+    // Блокируем клик если: уже выбрано, кнопка отключена или идет загрузка
+    if (isSelected || isSelectButtonDisabled || isAnimating) {
+      e.stopPropagation();
+      return;
+    }
+    e.stopPropagation(); // Предотвращаем всплытие события к карточке
+    onSelectButtonClick();
+  };
+
   return (
-    <article className="card" ref={cardRef} onClick={handleClick}>
+    <article
+      className={`card ${isSelected ? 'card--active' : ''}`}
+      ref={cardRef}
+      onClick={handleClick}>
+      <h2 className={`action-text ${showActionText ? 'action-text--visible' : ''}`}>
+        Пройдите в фотозону
+      </h2>
       <div className="card__inner">
         <div className="card__top">
           <div className="card__level">
@@ -56,11 +101,18 @@ const Card: React.FC<CardProps> = (cardData: CardProps) => {
             </div>
             <div className="status">{position}</div>
           </div>
-          <div className="selected-label">
+          <div
+            className="selected-label"
+            onClick={handleSelectClick}>
             <svg viewBox="0 0 120 20" width="130" height="30">
-              <use href="#icon-success"></use>
+              {isSelected ? (
+                <use href="#icon-success"></use>
+              ) : (
+                <use href="#icon-select"></use>
+              )}
             </svg>
           </div>
+
         </div>
       </div>
     </article>

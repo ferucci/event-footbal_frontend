@@ -58,7 +58,118 @@ $shiftFromTop: 1rem;
   will-change: transform, opacity;
   z-index: 3;
 
-  &.active {
+
+  .action-text {
+    display: none;
+  }
+
+  &.card--active {
+
+    /* Стили для красивой надписи */
+    .action-text {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.5);
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      text-align: center;
+      text-shadow:
+        0 0 10px var(--electric-blue),
+        0 0 20px var(--electric-blue),
+        0 0 30px var(--electric-blue);
+      background: linear-gradient(45deg, #2D008E, var(--electric-blue));
+      padding: 1rem 2rem;
+      border-radius: 1rem;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      box-shadow:
+        0 0 20px rgba(45, 0, 142, 0.5),
+        inset 0 0 20px rgba(255, 255, 255, 0.2);
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      backdrop-filter: blur(15px);
+      width: max-content;
+      max-width: 90%;
+      max-width: 100%;
+      height: 100%;
+      max-height: 100%;
+      line-height: 120%;
+    }
+
+    /* Анимация появления */
+    .action-text--visible {
+      display: flex;
+      align-items: center;
+      animation: actionTextAppear 1.2s ease-out forwards;
+    }
+
+    @keyframes actionTextAppear {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5) rotate(-5deg);
+      }
+
+      50% {
+        opacity: 0.8;
+        transform: translate(-50%, -50%) scale(1.1) rotate(2deg);
+      }
+
+      70% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0.95) rotate(-1deg);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+      }
+    }
+
+    /* Дополнительная анимация свечения */
+    @keyframes textGlow {
+
+      0%,
+      100% {
+        text-shadow:
+          0 0 10px var(--electric-blue),
+          0 0 20px var(--electric-blue),
+          0 0 30px var(--electric-blue);
+      }
+
+      50% {
+        text-shadow:
+          0 0 15px var(--electric-blue),
+          0 0 30px var(--electric-blue),
+          0 0 45px var(--electric-blue);
+      }
+    }
+
+    .action-text--visible {
+      animation:
+        actionTextAppear 1.2s ease-out forwards,
+        textGlow 2s ease-in-out infinite;
+    }
+
+    /* Адаптивность для мобильных */
+    @media (max-width: 768px) {
+      .action-text {
+        font-size: 1.5rem;
+        padding: 0.8rem 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .action-text {
+        font-size: 1.2rem;
+        padding: 0.6rem 1.2rem;
+      }
+    }
+  }
+
+  &.card--active {
     max-width: 100%;
     background-size: 100% 100%, 90% calc(50% - 1rem);
     position: fixed;

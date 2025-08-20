@@ -64,6 +64,26 @@ body {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
+
+  &::after {
+    position: absolute;
+    content: '';
+    top: 5%;
+    right: 5%;
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+    background: linear-gradient(45deg,
+        transparent calc(50% - 1px),
+        vars.$electric-blue calc(50% - 1px),
+        vars.$blue calc(50% + 1px),
+        transparent calc(50% + 1px)),
+      linear-gradient(-45deg,
+        transparent calc(50% - 1px),
+        vars.$electric-blue calc(50% - 1px),
+        vars.$blue calc(50% + 1px),
+        transparent calc(50% + 1px));
+  }
 }
 
 .overlay.active,
