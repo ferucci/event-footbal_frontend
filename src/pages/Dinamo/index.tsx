@@ -8,7 +8,7 @@ const App: React.FC = () => {
     <div className='wrapper'>
       <Header title="Dinamo site" />
       <main>
-        <CardsGrid />
+        <CardsGrid site="Dinamo" />
       </main>
     </div>
   );

@@ -13,6 +13,10 @@ export interface AuthContextType {
   checkAuth: () => Promise<boolean>; // Проверка валидности токена
 }
 
+export interface CardsGridProps {
+  site: string;
+}
+
 // Определяем тип для данных карточки
 export interface CardData {
   id: number;
@@ -24,6 +28,7 @@ export interface CardData {
   rate: number;
   image: string;
   country: string;
+  site?: string;
 }
 
 export interface CardProps extends CardData {

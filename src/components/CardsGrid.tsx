@@ -1,11 +1,12 @@
-import type { CardData } from '@/types';
+import type { CardData, CardsGridProps } from '@/types';
 import { urlApi } from '@/utils/vars';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Card from './Card';
 import { useCardManager } from './CardManager/CardManager';
+import CardPhoto from './CardPhoto';
 import LoadingSpinner from './LoadingSpinner';
 
-const CardsGrid: React.FC = () => {
+const CardsGrid: React.FC<CardsGridProps> = ({ site }) => {
   const [cardsData, setCardsData] = useState<CardData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -17,10 +18,15 @@ const CardsGrid: React.FC = () => {
     handleOverlayClick,
     overlayRef,
     selectedCardId,
-    isSelectButtonDisabled, // Получаем состояние блокировки кнопки
+    isSelectButtonDisabled,
     isAnimating,
     showActionText,
   } = useCardManager({ cardsContainerRef });
+
+  // Определяем компонент карточки на основе сайта
+  const CardComponent = useMemo(() => {
+    return site.toLowerCase() === "spartak" ? CardPhoto : Card;
+  }, [site]);
 
   // Сортировка карточек
   const sortedCards = useMemo(() => {
@@ -31,7 +37,7 @@ const CardsGrid: React.FC = () => {
   useEffect(() => {
     const fetchCardsData = async () => {
       try {
-        const response = await fetch(`${urlApi}/cards`);
+        const response = await fetch(`${urlApi}/cards?site=${site}`);
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -48,33 +54,36 @@ const CardsGrid: React.FC = () => {
     };
 
     fetchCardsData();
-  }, []);
+  }, [site]);
 
   if (loading) return <LoadingSpinner />;
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <section className="cards" ref={cardsContainerRef}>
-      {sortedCards.map((card) => (
-        <Card
-          key={card.id || sortedCards.length + 1}
-          id={card.id}
-          name={card.name}
-          number={card.number}
-          position={card.position}
-          height={card.height}
-          weight={card.weight}
-          rate={card.rate}
-          image={card.image}
-          country={card.country}
-          onClick={handleCardClick}
-          onSelectButtonClick={handleSelectButtonClick}
-          isSelected={selectedCardId === String(card.id)}
-          isSelectButtonDisabled={isSelectButtonDisabled} // Передаем пропс
-          isAnimating={isAnimating} // Передаем состояние анимации
-          showActionText={showActionText && selectedCardId === String(card.id)} // Показываем только для выбранной карточки
-        />
-      ))}
+    <section className="cards" id={site.toLowerCase()} ref={cardsContainerRef}>
+      {sortedCards.map((card) => {
+        return (
+          <CardComponent
+            key={card.id || sortedCards.length + 1}
+            id={card.id}
+            name={card.name}
+            number={card.number}
+            position={card.position}
+            height={card.height}
+            weight={card.weight}
+            rate={card.rate}
+            image={card.image}
+            country={card.country}
+            site={card.site}
+            onClick={handleCardClick}
+            onSelectButtonClick={handleSelectButtonClick}
+            isSelected={selectedCardId === String(card.id)}
+            isSelectButtonDisabled={isSelectButtonDisabled}
+            isAnimating={isAnimating}
+            showActionText={showActionText && selectedCardId === String(card.id)}
+          />
+        );
+      })}
       <div
         className="overlay"
         ref={overlayRef}

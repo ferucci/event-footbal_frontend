@@ -13,19 +13,24 @@
   border-radius: 1rem;
 }
 
-*::-webkit-scrollbar-track {
+*::-webkit-scrollbar-track:has(#dinamo) {
   background-color: vars.$color-bg-login; // Цвет линии трека
 }
 
-*::-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb:has(#dinamo) {
   background-color: vars.$blue; // Цвет ползунка
   height: 1px; // Высота ползунка
   border-radius: 1rem;
 }
 
-* {
+*:has(#dinamo) {
   scrollbar-width: thin; // "auto" | "thin" | "none"
   scrollbar-color: vars.$blue vars.$color-bg-login; // thumb track
+}
+
+*:has(#spartak) {
+  scrollbar-width: thin; // "auto" | "thin" | "none"
+  scrollbar-color: vars.$red vars.$color-bg-login; // thumb track
 }
 
 body {
@@ -73,17 +78,33 @@ body {
     width: 2rem;
     height: 2rem;
     cursor: pointer;
-    background: linear-gradient(45deg,
-        transparent calc(50% - 1px),
-        vars.$electric-blue calc(50% - 1px),
-        vars.$blue calc(50% + 1px),
-        transparent calc(50% + 1px)),
-      linear-gradient(-45deg,
-        transparent calc(50% - 1px),
-        vars.$electric-blue calc(50% - 1px),
-        vars.$blue calc(50% + 1px),
-        transparent calc(50% + 1px));
   }
+}
+
+#dinamo .overlay::after {
+  background: linear-gradient(45deg,
+      transparent calc(50% - 1px),
+      vars.$electric-blue calc(50% - 1px),
+      vars.$blue calc(50% + 1px),
+      transparent calc(50% + 1px)),
+    linear-gradient(-45deg,
+      transparent calc(50% - 1px),
+      vars.$electric-blue calc(50% - 1px),
+      vars.$blue calc(50% + 1px),
+      transparent calc(50% + 1px));
+}
+
+#spartak .overlay::after {
+  background: linear-gradient(45deg,
+      transparent calc(50% - 1px),
+      vars.$electric-red calc(50% - 1px),
+      vars.$red calc(50% + 1px),
+      transparent calc(50% + 1px)),
+    linear-gradient(-45deg,
+      transparent calc(50% - 1px),
+      vars.$electric-red calc(50% - 1px),
+      vars.$red calc(50% + 1px),
+      transparent calc(50% + 1px));
 }
 
 .overlay.active,
