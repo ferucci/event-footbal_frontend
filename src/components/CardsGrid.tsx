@@ -3,7 +3,6 @@ import { urlApi } from '@/utils/vars';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Card from './Card';
 import { useCardManager } from './CardManager/CardManager';
-import CardPhoto from './CardPhoto';
 import LoadingSpinner from './LoadingSpinner';
 
 const CardsGrid: React.FC<CardsGridProps> = ({ site }) => {
@@ -23,9 +22,9 @@ const CardsGrid: React.FC<CardsGridProps> = ({ site }) => {
     showActionText,
   } = useCardManager({ cardsContainerRef });
 
-  // Определяем компонент карточки на основе сайта
-  const CardComponent = useMemo(() => {
-    return site.toLowerCase() === "spartak" ? CardPhoto : Card;
+  // вариант карточки
+  const cardVariant = useMemo(() => {
+    return site.toLowerCase() === "spartak" ? "photo" : "default";
   }, [site]);
 
   // Сортировка карточек
@@ -63,8 +62,9 @@ const CardsGrid: React.FC<CardsGridProps> = ({ site }) => {
     <section className="cards" id={site.toLowerCase()} ref={cardsContainerRef}>
       {sortedCards.map((card) => {
         return (
-          <CardComponent
+          <Card
             key={card.id || sortedCards.length + 1}
+            variant={cardVariant}
             id={card.id}
             name={card.name}
             number={card.number}

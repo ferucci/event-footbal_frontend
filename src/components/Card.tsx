@@ -1,13 +1,5 @@
-import type { CardProps } from '@/types';
+import type { ExtendedCardProps } from '@/types';
 import React, { useRef } from 'react';
-
-interface ExtendedCardProps extends CardProps {
-  onSelectButtonClick: () => void;
-  isSelected: boolean;
-  isSelectButtonDisabled: boolean;
-  isAnimating: boolean;
-  showActionText: boolean;
-}
 
 const Card: React.FC<ExtendedCardProps> = (cardData: ExtendedCardProps) => {
   const {
@@ -25,7 +17,8 @@ const Card: React.FC<ExtendedCardProps> = (cardData: ExtendedCardProps) => {
     isSelected,
     isSelectButtonDisabled,
     isAnimating,
-    showActionText
+    showActionText,
+    variant = 'default'
   } = cardData;
 
   const cardRef = useRef<HTMLDivElement>(null);
@@ -66,6 +59,48 @@ const Card: React.FC<ExtendedCardProps> = (cardData: ExtendedCardProps) => {
     e.stopPropagation(); // Предотвращаем всплытие события к карточке
     onSelectButtonClick();
   };
+
+  const getAbsoluteImagePath = (imgPath: string) => {
+    if (imgPath.startsWith('./')) {
+      return imgPath.replace('./', '/');
+    }
+    return imgPath;
+  };
+
+  // фото-вариант
+  if (variant === 'photo') {
+    return (
+      <article
+        className={`card ${isSelected ? 'card--active' : ''}`}
+        ref={cardRef}
+        onClick={handleClick}
+        style={{
+          background: `url(${getAbsoluteImagePath(image)})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          width: "100%",
+          minHeight: "12.5rem"
+        }}
+      >
+        <h2 className={`action-text ${showActionText ? 'action-text--visible' : ''}`}>
+          Пройдите в фотозону
+        </h2>
+
+        <div
+          className="selected-label"
+          onClick={handleSelectClick}
+        >
+          <svg viewBox="0 0 120 20" width="130" height="30">
+            {isSelected ? (
+              <use href="#icon-success"></use>
+            ) : (
+              <use href="#icon-select"></use>
+            )}
+          </svg>
+        </div>
+      </article>
+    );
+  }
 
   return (
     <article

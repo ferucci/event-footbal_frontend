@@ -38,6 +38,15 @@ export interface CardProps extends CardData {
   ) => void;
 }
 
+export interface ExtendedCardProps extends CardProps {
+  onSelectButtonClick: () => void;
+  isSelected: boolean;
+  isSelectButtonDisabled: boolean;
+  isAnimating: boolean;
+  showActionText: boolean;
+  variant?: 'default' | 'photo';
+}
+
 export interface LocationState {
   from?: {
     pathname: string;
