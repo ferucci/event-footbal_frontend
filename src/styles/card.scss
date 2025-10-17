@@ -373,6 +373,10 @@ $shiftFromTop: 1rem;
   }
 }
 
+#spartak .card.card--active {
+  max-height: 40vh;
+}
+
 $randomNumber: math.percentage(0.2);
 
 $widthCard: - 150px;
