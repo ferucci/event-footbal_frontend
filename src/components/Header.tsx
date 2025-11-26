@@ -9,7 +9,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
     <header className="header">
       <div className="header__inner">
         <div className="header__logo">
-          <img src="./images/logo.svg" alt={title} />
+          <img src="./images/VU_logotitle.png" alt={title} />
         </div>
       </div>
     </header>
