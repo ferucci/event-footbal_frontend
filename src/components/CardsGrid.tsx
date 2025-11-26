@@ -27,9 +27,14 @@ const CardsGrid: React.FC<CardsGridProps> = ({ site }) => {
     return site.toLowerCase() === "spartak" ? "photo" : "default";
   }, [site]);
 
-  // Сортировка карточек
+  // Сортировка карточек в случайном порядке (алгоритм Фишера-Йейтса)
   const sortedCards = useMemo(() => {
-    return [...cardsData].sort((a, b) => +b.rate - +a.rate);
+    const shuffled = [...cardsData];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
   }, [cardsData]);
 
   // Эффект для загрузки данных при монтировании компонента
