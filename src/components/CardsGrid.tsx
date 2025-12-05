@@ -4,6 +4,8 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Card from './Card';
 import { useCardManager } from './CardManager/CardManager';
 import LoadingSpinner from './LoadingSpinner';
+import PrivacyModal from './PrivacyModal';
+
 
 const CardsGrid: React.FC<CardsGridProps> = ({ site }) => {
   const [cardsData, setCardsData] = useState<CardData[]>([]);
@@ -15,11 +17,16 @@ const CardsGrid: React.FC<CardsGridProps> = ({ site }) => {
     handleCardClick,
     handleSelectButtonClick,
     handleOverlayClick,
+    handlePrivacyAccept,
+    handlePrivacyReject,
     overlayRef,
     selectedCardId,
     isSelectButtonDisabled,
     isAnimating,
     showActionText,
+    showPrivacyModal,
+    pendingCardData,
+    isLoading
   } = useCardManager({ cardsContainerRef });
 
   // вариант карточки
@@ -89,6 +96,17 @@ const CardsGrid: React.FC<CardsGridProps> = ({ site }) => {
           />
         );
       })}
+
+      {showPrivacyModal && pendingCardData && (
+        <PrivacyModal
+          isOpen={showPrivacyModal}
+          playerName={pendingCardData.name}
+          onAccept={handlePrivacyAccept}
+          onReject={handlePrivacyReject}
+          isLoading={isLoading}
+        />
+      )}
+
       <div
         className="overlay"
         ref={overlayRef}

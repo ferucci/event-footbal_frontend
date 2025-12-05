@@ -27,7 +27,10 @@ export const useCardManager = ({ cardsContainerRef }: UseCardManagerProps) => {
   const animatorRef = useRef<CardAnimator | null>(null);
   const bodyRef = useRef<HTMLBodyElement | null>(null);
 
-  // Храним все связанные данные в одном объекте для согласованности
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [pendingCardData, setPendingCardData] = useState<CardData | null>(null);
+
+  // Храню все связанные данные в одном объекте для согласованности
   const activeCardRef = useRef<{
     data: CardData | null;
     element: HTMLDivElement | null;
@@ -51,13 +54,13 @@ export const useCardManager = ({ cardsContainerRef }: UseCardManagerProps) => {
     clearActiveCardTimeout();
     activeCardRef.current.data = null;
     activeCardRef.current.element = null;
-    setIsAnimating(false); // Сбрасываем состояние анимации
-    setShowActionText(false); // Скрываем надпись при очистке
+    setIsAnimating(false); // Сбрасываю состояние анимации
+    setShowActionText(false); // Скрываю надпись при очистке
   }, [clearActiveCardTimeout]);
 
   // Эффект для инициализации и очистки
   useEffect(() => {
-    // Сохраняем ссылку на body при монтировании
+    // Сохраняю ссылку на body при монтировании
     bodyRef.current = document.body as HTMLBodyElement;
     animatorRef.current = new CardAnimator(overlayRef, bodyRef, cardsContainerRef, setIsAnimating);
 
@@ -74,18 +77,18 @@ export const useCardManager = ({ cardsContainerRef }: UseCardManagerProps) => {
   ) => {
     const cardId = String(cardData.id);
 
-    // Если карточка уже выбрана - ничего не делаем
+    // Если карточка уже выбрана - ничего не делаю
     if (selectedCardId === cardId) return;
     setSelectedCardId(null);
-    // Блокируем если: уже выбрана, идет анимация, загрузка или уже есть активная карточка
+    // Блокирую если: уже выбрана, идет анимация, загрузка или уже есть активная карточка
     if (selectedCardId === cardId || isAnimating || isLoading || !animatorRef.current || animatorRef.current.hasActiveCard()) {
       return;
     }
-    setIsAnimating(true); // Начинаем анимацию
-    setShowActionText(false); // Скрываем надпись при открытии новой карточки
-    cleanupActiveCard(); // Очищаем предыдущую активную карточку
+    setIsAnimating(true); // Начинаю анимацию
+    setShowActionText(false); // Скрываю надпись при открытии новой карточки
+    cleanupActiveCard(); // Очищаю предыдущую активную карточку
 
-    // Сохраняем новую активную карточку
+    // Сохраняю новую активную карточку
     activeCardRef.current.data = cardData;
     activeCardRef.current.element = cardRef.current;
 
@@ -94,57 +97,34 @@ export const useCardManager = ({ cardsContainerRef }: UseCardManagerProps) => {
     animatorRef.current.activateCard(cardRef.current);
     animatorRef.current.showOverlay();
 
-    // Устанавливаем таймер для автоматического скрытия
-    activeCardRef.current.timeoutId = setTimeout(() => {
-      if (activeCardRef.current.element && selectedCardId !== String(activeCardRef.current.data?.id)) {
-        animatorRef.current?.deactivateCard(activeCardRef.current.element, false);
-        animatorRef.current?.hideOverlay();
-        animatorRef.current?.removePlaceholder();
-        cleanupActiveCard();
-        setIsSelectButtonDisabled(false);
-      }
-    }, ACTIVE_CARD_TIME);
+    // Устанавливаю таймер для автоматического скрытия
+    // activeCardRef.current.timeoutId = setTimeout(() => {
+    //   if (activeCardRef.current.element && selectedCardId !== String(activeCardRef.current.data?.id)) {
+    //     animatorRef.current?.deactivateCard(activeCardRef.current.element, false);
+    //     animatorRef.current?.hideOverlay();
+    //     animatorRef.current?.removePlaceholder();
+    //     cleanupActiveCard();
+    //     setIsSelectButtonDisabled(false);
+    //   }
+    // }, ACTIVE_CARD_TIME);
+
   }, [isLoading, selectedCardId, cleanupActiveCard, isAnimating]);
 
+  // Обработчик кнопки "Выбрать" в карточке
   const handleSelectButtonClick = useCallback(async () => {
-    // Блокируем если идет анимация или загрузка
+    // Блокирую если идет анимация или загрузка
     if (isAnimating || isLoading || !activeCardRef.current.data || !animatorRef.current || !activeCardRef.current.element) return;
 
-    setIsLoading(true);
-    setError(null);
-    setIsSelectButtonDisabled(true); // Блокируем кнопку
-    clearActiveCardTimeout(); // Очищаем таймер автоскрытия
+    // Сохраняю данные выбранной карточки
+    setPendingCardData(activeCardRef.current.data);
+    // Показываю политику
+    setShowPrivacyModal(true);
 
-    try {
-      await sendWithRetry(activeCardRef.current.data);
-      setRetryCount(0);
+    clearActiveCardTimeout();
 
-      const cardId = String(activeCardRef.current.data.id);
-      setSelectedCardId(cardId); // Устанавливаем выбранную карточку
+  }, [clearActiveCardTimeout, isAnimating, isLoading]);
 
-      setTimeout(() => { setShowActionText(true); }, 1000)
-
-      // Устанавливаем новый таймер для скрытия после выбора
-      activeCardRef.current.timeoutId = setTimeout(() => {
-        if (activeCardRef.current.element) {
-          // Сохраняем надпись "Выбрано" при уменьшении
-          animatorRef.current?.deactivateCard(activeCardRef.current.element, true);
-          animatorRef.current?.hideOverlay();
-          animatorRef.current?.removePlaceholder();
-          cleanupActiveCard();
-          setIsSelectButtonDisabled(false); // Разблокировка кнопки после таймаута
-        }
-      }, ACTIVE_CARD_TIME);
-
-    } catch (err) {
-      setError(handleApiError(err, retryCount));
-      setRetryCount((prev) => prev + 1);
-      setIsSelectButtonDisabled(false); // Разблокировка при ошибки
-    } finally {
-      setIsLoading(false);
-    }
-  }, [clearActiveCardTimeout, retryCount, cleanupActiveCard, isLoading, isAnimating]);
-
+  // Обработчик по оверлею
   const handleOverlayClick = useCallback((e: React.MouseEvent) => {
     // Блокируем клики во время анимации
     if (isAnimating || !animatorRef.current) return;
@@ -165,16 +145,81 @@ export const useCardManager = ({ cardsContainerRef }: UseCardManagerProps) => {
     }
   }, [clearActiveCardTimeout, cleanupActiveCard, selectedCardId, isAnimating]);
 
+  // Обработчик политики при согласии
+  const handlePrivacyAccept = useCallback(async () => {
+    if (!pendingCardData || !activeCardRef.current.element) return;
+
+    setIsLoading(true);
+    setError(null);
+    setIsSelectButtonDisabled(true);
+    setShowPrivacyModal(false);
+
+    try {
+      await sendWithRetry(pendingCardData);
+      setRetryCount(0);
+
+      const cardId = String(pendingCardData.id);
+      setSelectedCardId(cardId);
+
+      setTimeout(() => { setShowActionText(true); }, 1000);
+
+      // Устанавливаем таймер для скрытия после выбора
+      activeCardRef.current.timeoutId = setTimeout(() => {
+        if (activeCardRef.current.element) {
+          animatorRef.current?.deactivateCard(activeCardRef.current.element, true);
+          animatorRef.current?.hideOverlay();
+          animatorRef.current?.removePlaceholder();
+          cleanupActiveCard();
+          setIsSelectButtonDisabled(false);
+        }
+      }, ACTIVE_CARD_TIME);
+
+    } catch (err) {
+      setError(handleApiError(err, retryCount));
+      setRetryCount((prev) => prev + 1);
+      setIsSelectButtonDisabled(false);
+      // При ошибке возвращаемся к состоянию до выбора
+      setShowPrivacyModal(true);
+    } finally {
+      setIsLoading(false);
+      setPendingCardData(null);
+    }
+  }, [pendingCardData, retryCount, cleanupActiveCard]);
+
+  // Обработчик политики при отказе
+  const handlePrivacyReject = useCallback(() => {
+    setShowPrivacyModal(false);
+    setPendingCardData(null);
+
+    // Восстанавливаем таймер автоскрытия
+    if (activeCardRef.current.element && activeCardRef.current.data) {
+      activeCardRef.current.timeoutId = setTimeout(() => {
+        if (activeCardRef.current.element && selectedCardId !== String(activeCardRef.current.data?.id)) {
+          animatorRef.current?.deactivateCard(activeCardRef.current.element, false);
+          animatorRef.current?.hideOverlay();
+          animatorRef.current?.removePlaceholder();
+          cleanupActiveCard();
+          setIsSelectButtonDisabled(false);
+        }
+      }, ACTIVE_CARD_TIME);
+    }
+  }, [cleanupActiveCard, selectedCardId]);
+
   return {
+    // Возвращаемые значения
     handleCardClick,
     handleSelectButtonClick,
     handleOverlayClick,
+    handlePrivacyAccept,
+    handlePrivacyReject,
     overlayRef,
     error,
     isLoading,
     selectedCardId,
-    isSelectButtonDisabled, // Добавляем в возвращаемые значения
-    isAnimating, // Возвращаем состояние анимации
-    showActionText
+    isSelectButtonDisabled,
+    isAnimating,
+    showActionText,
+    showPrivacyModal,
+    pendingCardData
   };
 };

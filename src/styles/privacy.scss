@@ -1,0 +1,145 @@
+@use 'vars' as *;
+@use 'mixins' as m;
+
+.privacy-modal-overlay {
+  @include m.df();
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.privacy-modal {
+  background: $bg;
+  border-radius: 12px;
+  padding: 0 22px;
+  max-width: 90%;
+  max-width: 30rem;
+  height: 100%;
+  max-height: 100%;
+  width: 90%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease;
+  overflow-y: auto;
+}
+
+.privacy-modal__title {
+  margin: 0 0 1vh 0;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.privacy-modal__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.privacy-modal__info {
+  text-align: center;
+  font-size: 1rem;
+}
+
+.privacy-modal__scrollable {
+  flex: 1;
+  overflow-y: auto;
+  border: 1px solid #606e88;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+
+  max-height: 50vh;
+  scrollbar-width: thin;
+  scrollbar-color: $blue transparent;
+
+  h3,
+  h4,
+  p,
+  li,
+  ul {
+    margin: 0 0 6px 0;
+  }
+
+  span {
+    display: inline-block;
+    margin-bottom: 2px;
+  }
+
+  h3 {
+    font-size: 15px;
+    font-weight: normal;
+  }
+
+  h4 {
+    font-size: 16px;
+  }
+
+  p,
+  li {
+    font-size: 12px;
+  }
+}
+
+.privacy-modal__buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.privacy-modal__button {
+  padding: 1vh 3vh;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.privacy-modal__button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.privacy-modal__button--reject {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.privacy-modal__button--reject:hover:not(:disabled) {
+  background-color: #e0e0e0;
+}
+
+.privacy-modal__button--accept {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.privacy-modal__button--accept:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
