@@ -1,6 +1,6 @@
 
-// export const urlApi = 'https://api.rubleani.ru'
-export const urlApi = 'http://localhost:3333'
+export const urlApi = 'https://api.rubleani.ru'
+// export const urlApi = 'http://localhost:3333'
 
 export const PATH_DINAMO = '/dinamo'
 export const PATH_SPARTAK = '/spartak'
