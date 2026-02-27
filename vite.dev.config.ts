@@ -8,7 +8,7 @@ export default defineConfig({
   },
   // Дополнительные dev-специфичные настройки
   server: {
-    port: 3001,
+    port: 3005,
     open: true
   }
 });
