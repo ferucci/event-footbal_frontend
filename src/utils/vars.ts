@@ -9,4 +9,4 @@ export const PATH_LOGIN = "/login"
 export const PATH_DASHBORD = '/dashboard'
 
 // Безопасные пути для перенаправления
-export const SAFE_PATHS = ['/', `${PATH_DINAMO}`, `${PATH_SPARTAK}`, `${PATH_DASHBORD}`];
+export const SAFE_PATHS = ['/', `${PATH_DINAMO}`, `${PATH_SPARTAK}`, `${PATH_FINALE}`];

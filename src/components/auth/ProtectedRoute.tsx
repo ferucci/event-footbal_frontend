@@ -14,7 +14,7 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to={PATH_LOGIN} state={{ from: location }} replace />;
+    return <Navigate to={PATH_LOGIN} state={{ from: location.pathname }} replace />;
   }
   return <>{children}</>;
 };

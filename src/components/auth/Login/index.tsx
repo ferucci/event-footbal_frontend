@@ -1,6 +1,8 @@
 import { useAuth } from '@/context/AuthContext';
 import React, { useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
+import { PATH_FINALE } from '@/utils/vars';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './Login.module.scss';
 
 /**
@@ -15,8 +17,10 @@ const Login: React.FC = () => {
 
   // Получаем методы из контекста аутентификации
   const { login } = useAuth();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+  const location = useLocation();
 
+  const from = location.state?.from || PATH_FINALE;
   /**
    * Обработчик отправки формы
    * @param e - Событие формы
@@ -29,6 +33,7 @@ const Login: React.FC = () => {
     try {
       // Вызываем метод login из контекста
       await login(email, password);
+      navigate(from, { replace: true });
 
       // Перенаправление происходит внутри login()
       // Дополнительный navigate не нужен
