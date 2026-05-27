@@ -68,7 +68,7 @@ const Card: React.FC<ExtendedCardProps> = (cardData: ExtendedCardProps) => {
   };
 
   // фото-вариант
-  if (variant === 'photo') {
+  if (variant === 'photo' || variant === 'finale') {
     return (
       <article
         className={`card ${isSelected ? 'card--active' : ''}`}
@@ -76,10 +76,11 @@ const Card: React.FC<ExtendedCardProps> = (cardData: ExtendedCardProps) => {
         onClick={handleClick}
         style={{
           background: `url(${getAbsoluteImagePath(image)})`,
-          backgroundSize: 'cover',
+          backgroundSize: 'contain',
+          backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
-          width: "100%",
-          minHeight: "12.5rem"
+          minHeight: "12.5rem",
+          ...(variant === 'photo' && { width: "100%" })
         }}
       >
         <h2 className={`action-text ${showActionText ? 'action-text--visible' : ''}`}>

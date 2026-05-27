@@ -44,7 +44,7 @@ export interface ExtendedCardProps extends CardProps {
   isSelectButtonDisabled: boolean;
   isAnimating: boolean;
   showActionText: boolean;
-  variant?: 'default' | 'photo';
+  variant?: 'default' | 'photo' | 'finale';
 }
 
 export interface LocationState {

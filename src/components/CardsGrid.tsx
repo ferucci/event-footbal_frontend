@@ -31,7 +31,9 @@ const CardsGrid: React.FC<CardsGridProps> = ({ site }) => {
 
   // вариант карточки
   const cardVariant = useMemo(() => {
-    return site.toLowerCase() === "spartak" ? "photo" : "default";
+    if (site.toLowerCase() === "spartak") return "photo";
+    if (site.toLowerCase() === "finale") return "finale";
+    return "default";
   }, [site]);
 
   // Сортировка карточек в случайном порядке (алгоритм Фишера-Йейтса)

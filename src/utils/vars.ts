@@ -4,6 +4,7 @@ export const urlApi = 'https://api.rubleani.ru'
 
 export const PATH_DINAMO = '/dinamo'
 export const PATH_SPARTAK = '/spartak'
+export const PATH_FINALE = '/finale'
 export const PATH_LOGIN = "/login"
 export const PATH_DASHBORD = '/dashboard'
 
